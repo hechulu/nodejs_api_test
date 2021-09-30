@@ -6,9 +6,11 @@ module.exports.success = function (request,response,message,status){
     })
 }
 
-module.exports.error = function (request,response,message,status){
+module.exports.error = function (request,response,message,status,errorLog){
+    console.error(errorLog || "");
     response.status(status || 500).send({
         "error":message,
         "body":""
     })
+    
 }

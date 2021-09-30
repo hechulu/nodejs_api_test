@@ -9,8 +9,8 @@ expenses_router.get('/',function(request,response){
     //console.log(request.body);
     //response.status(200).send([]); //List of all expenses of the week
    // mod_response.success(request,response,"Regresa la lista actual de la semana",200)
-   let body = request.body;
-   controller.getExpenses(body.user)
+   //let body = request.body;
+   controller.getExpenses(request.body.user,request.body.initDate,request.body.endDate)
     .then((allExpenses)=>{
         mod_response.success(request,response,allExpenses,200)
     })
@@ -20,7 +20,7 @@ expenses_router.get('/',function(request,response){
 
 });
 
-expenses_router.post('/add',function(request,response){
+expenses_router.post('/',function(request,response){
     //response.send("hello my first router");
     //console.log(request.body);
     //response.status(200).send([]); //List of all expenses of the week
@@ -35,20 +35,35 @@ expenses_router.post('/add',function(request,response){
         });
 });
 
-expenses_router.patch('/edit',function(request,response){
+expenses_router.patch('/:id',function(request,response){
     //response.send("hello my first router");
-    console.log(request.body);
+    //console.log(request.body);
     //response.status(200).send([]); //List of all expenses of the week
     //mod_response.error(request,response,"Error simulado",401)
-    mod_response.error(request,response,"Error simulado")
+   // mod_response.error(request,response,"Error simulado")
+
+  // console.log(request.params.id)
+   controller.updateExpenses(request.body.user,request.params.id,request.body.expense,request.body.description).then((expense_updated)=>{
+    mod_response.success(request,response,expense_updated,200)
+    })
+    .catch((e)=>{
+        mod_response.error(request,response,"Error interno",500,e)
+    });
+   //response.send("ok")
 });
 
-expenses_router.delete('/remove',function(request,response){
+expenses_router.delete('/:id',function(request,response){
     //response.send("hello my first router");
-    console.log(request.body);
+    //console.log(request.body);
     //response.status(200).send([]); //List of all expenses of the week
     //mod_response.error(request,response,"Error simulado",401)
-    mod_response.error(request,response,"Error simulado")
+    //mod_response.error(request,response,"Error simulado")
+    controller.deleteExpense(request.params.id).then((deleted)=>{
+        mod_response.success(request,response,deleted,200)
+        })
+        .catch((e)=>{
+            mod_response.error(request,response,"Error interno",500,e)
+        });
 });
 
 module.exports = expenses_router;

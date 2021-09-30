@@ -28,18 +28,43 @@ function addExpense(user,expense,description){
 
 }
 
-function getExpenses(user){
+function getExpenses(user,initDate,endDate){
     return new Promise((resolve,reject)=>{
         if (!user){
             console.error("[expense controller get] No hay usuario")
             return reject("Datos incompletos")
         }
 
-        return resolve(store_expense.getAll());
+        return resolve(store_expense.getAll(initDate || null, endDate || null));
     });
 }
+
+function updateExpenses(user,id,expense,description){
+    return new Promise((resolve,reject)=>{
+        if (!user || !expense || !description || !id){
+            console.error(`[expense controller updateExpenses] ${user} - ${expense} - ${description} - ${id}`)
+            return reject("Datos incompletos")
+        }
+
+        return resolve(store_expense.editExpenses(id,expense,description,user));
+    });
+}
+
+function deleteExpense(id){
+    return new Promise((resolve,reject)=>{
+        if (!id){
+            console.error(`[expense controller deleteExpense] ${id}`)
+            return reject("Datos incompletos")
+        }
+
+        return resolve(store_expense.deleteExpense(id));
+    });
+}
+
 
 module.exports = {
     addExpense,
     getExpenses,
+    updateExpenses,
+    deleteExpense
 }
